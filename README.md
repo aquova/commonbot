@@ -1,5 +1,5 @@
-# Docker Discord.py
+# commonbot
 
-Dockerfiles to be used in creating a base for a ready-made environment for my Discord bots. Based upon the Alpine Linux Python image.
+Python utility library to be used with my Discord bots
 
-https://hub.docker.com/repository/docker/aquova/discord.py
+https://hub.docker.com/r/aquova/commonbot
