@@ -35,10 +35,4 @@ class UserLookup:
             if userid in self.recent_bans:
                 username = self.recent_bans[userid]
 
-        if username == None:
-            # Check the database to see if we can get their name from their most recent infraction (if any)
-            checkDatabase = db.search(userid)
-            if checkDatabase != []:
-                username = checkDatabase[-1].name
-
         return username

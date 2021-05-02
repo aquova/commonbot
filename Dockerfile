@@ -8,4 +8,4 @@ RUN apk update && apk add \
 COPY setup.py /tmp
 COPY commonbot /tmp/commonbot
 RUN python3 /tmp/setup.py bdist_wheel
-RUN pip3 install /tmp/dist/commonbot-1.1.0-py3-none-any.whl
+RUN pip3 install /tmp/dist/commonbot-1.1.1-py3-none-any.whl
