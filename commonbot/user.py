@@ -1,8 +1,8 @@
 import discord, re
 import commonbot.utils
 
-def fetch_user(server, userid):
-    return discord.utils.get(server.members, id=userid)
+def fetch_user(client, userid):
+    return client.get_user(userid)
 
 class UserLookup:
     def __init__(self):
@@ -79,10 +79,10 @@ class UserLookup:
         except IndexError:
             return None
 
-    def fetch_username(self, server, userid):
+    def fetch_username(self, client, userid):
         username = None
 
-        member = fetch_user(server, userid)
+        member = fetch_user(client, userid)
         if member != None:
             # If we found a member in the server, simply format the username
             username = f"{str(member)}"
