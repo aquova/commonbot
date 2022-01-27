@@ -1,3 +1,4 @@
+# Strips the prefix character from a string
 def strip_prefix(m, prefix):
     return m[len(str(prefix)):]
 
@@ -20,32 +21,26 @@ def get_first_word(m):
 
 # Input t is of the form: YYYY-MM-DD HH:MM:SS.SSSSSS
 # Output is of the form YYYY-MM-DD
-def formatTime(t):
+def format_time(t):
     date = str(t).split()[0]
     return date
 
 # Checks if given user has one of the roles specified in config.json
-def checkRoles(user, validRoles):
-    try:
-        if len(validRoles) == 1 and validRoles[0] == "":
+def check_roles(user, valid_roles):
+    for role in user.roles:
+        if role.id in valid_roles:
             return True
-        for role in user.roles:
-            for r in validRoles:
-                if role.id == r:
-                    return True
-        return False
-    except AttributeError as e:
-        print(f"The user {str(user)} had this issue {e}")
+    return False
 
 # Since usernames can have spaces, first check if it's a username, otherwise just cut off first word as normal
 # 'user' will either be the correct username, or an ID.
-def parseMessage(message, username):
+def parse_message(message, username):
     m = " ".join(message.split()[1:])
     if m.startswith(username):
         return m[len(username)+1:]
     return strip_words(message, 2)
 
-def getTimeDelta(t1, t2):
+def get_time_delta(t1, t2):
     # t1 should be larger than t2
     delta = t1 - t2
     hours, remainder = divmod(delta.seconds, 3600)
@@ -53,7 +48,7 @@ def getTimeDelta(t1, t2):
     return delta.days, hours, minutes
 
 # Combines message content and attachment URLs together
-def combineMessage(mes):
+def combine_message(mes):
     out = mes.content
     if mes.attachments != []:
         for item in mes.attachments:
