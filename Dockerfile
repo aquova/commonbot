@@ -5,6 +5,8 @@ RUN apk update && apk add \
     git \
     sqlite
 
+RUN pip3 install mypy
+
 COPY setup.py /tmp
 COPY commonbot /tmp/commonbot
 RUN python3 /tmp/setup.py bdist_wheel

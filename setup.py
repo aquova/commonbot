@@ -12,5 +12,6 @@ setup(
     description=DESCRIPTION,
     long_description=LONG_DESCRIPTION,
     packages=find_packages(),
+    package_data={"commonbot": ["py.typed"]},
     install_requires=["py-cord==1.7.3"]
 )
