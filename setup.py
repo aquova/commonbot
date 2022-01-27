@@ -12,5 +12,5 @@ setup(
     description=DESCRIPTION,
     long_description=LONG_DESCRIPTION,
     packages=find_packages(),
-    install_requires=["discord.py==1.7.3"]
+    install_requires=["py-cord==1.7.3"]
 )
