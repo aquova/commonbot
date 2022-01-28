@@ -57,7 +57,3 @@ def combine_message(mes: discord.Message) -> str:
             out += '\n' + item.url
 
     return out
-
-# Determines if we're allowed to post in given channel
-def is_valid_channel(chan: int, chan_list: list[int]) -> bool:
-    return chan in chan_list
