@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-VERSION = "1.7.3.1"
+VERSION = "1.7.3.2"
 DESCRIPTION = "aquova's common bot package"
 LONG_DESCRIPTION = "A package containing common functionality for my Discord bots"
 
