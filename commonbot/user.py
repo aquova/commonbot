@@ -2,9 +2,6 @@ import discord, re
 from commonbot.utils import strip_words
 from typing import Optional
 
-def fetch_user(client: discord.Client, userid: int):
-    return client.get_user(userid)
-
 class UserLookup:
     def __init__(self):
         self.recent_bans = {}
@@ -83,7 +80,7 @@ class UserLookup:
     def fetch_username(self, client: discord.Client, userid: int) -> Optional[str]:
         username = None
 
-        member = fetch_user(client, userid)
+        member = client.get_user(userid)
         if member:
             # If we found a member in the server, simply format the username
             username = f"{str(member)}"
