@@ -30,8 +30,8 @@ def format_time(t: datetime) -> str:
 
 # Checks if given user has one of the roles specified in config.json
 def check_roles(user: discord.Member, valid_roles: list[int]) -> bool:
-    for role in user.roles:
-        if role.id in valid_roles:
+    for role in valid_roles:
+        if user.get_role(role):
             return True
     return False
 
