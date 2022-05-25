@@ -1,7 +1,7 @@
 FROM python:alpine
 
 ENV DISCORD_PY_SHA=69b4d9a4fae44bef5414c5846f6e0c4712c1fda5
-ENV COMMONBOT_VER=2.0.0b1
+ENV COMMONBOT_VER=2.0.0b2
 
 RUN apk update && apk add \
     build-base \
