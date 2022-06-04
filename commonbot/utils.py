@@ -1,6 +1,8 @@
 import discord
 from datetime import datetime
 
+CHAR_LIMIT = 2000
+
 # Strips the prefix character from a string
 def strip_prefix(m: str, prefix: str) -> str:
     return m[len(str(prefix)):]
@@ -60,3 +62,11 @@ def combine_message(mes: discord.Message) -> str:
         out += '\n' + sticker.url
 
     return out
+
+async def send_message(message: str, channel: discord.TextChannel):
+    mes = message
+    while mes != "":
+        to_send = mes[:CHAR_LIMIT]
+        mes = mes[CHAR_LIMIT:]
+        await channel.send(to_send)
+
