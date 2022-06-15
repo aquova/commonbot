@@ -44,13 +44,13 @@ def parse_message(message: str, username: str) -> str:
         return m[len(username)+1:]
     return strip_words(message, 2)
 
-# Gets the days, hours, minutes, from the delta of two times
-def get_time_delta(t1: datetime, t2: datetime) -> tuple[int, int, int]:
+# Gets the days, hours, minutes, seconds from the delta of two times
+def get_time_delta(t1: datetime, t2: datetime) -> tuple[int, int, int, int]:
     # t1 should be larger than t2
     delta = t1 - t2
     hours, remainder = divmod(delta.seconds, 3600)
     minutes, seconds = divmod(remainder, 60)
-    return delta.days, hours, minutes
+    return delta.days, hours, minutes, seconds
 
 # Combines message content, attachment URLs, and stickers together
 def combine_message(mes: discord.Message) -> str:
