@@ -63,10 +63,14 @@ def combine_message(mes: discord.Message) -> str:
 
     return out
 
-async def send_message(message: str, channel: discord.TextChannel):
+async def send_message(message: str, channel: discord.TextChannel) -> discord.Message:
     mes = message
+    first = None
     while mes != "":
         to_send = mes[:CHAR_LIMIT]
         mes = mes[CHAR_LIMIT:]
-        await channel.send(to_send)
+        sent = await channel.send(to_send)
+        if not first:
+            first = sent
+    return first
 
