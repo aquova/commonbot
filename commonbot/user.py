@@ -1,6 +1,9 @@
-import discord, re
-from commonbot.utils import strip_words
+import re
 from typing import Optional
+
+import discord
+
+from commonbot.utils import strip_words
 
 class UserLookup:
     def __init__(self):
@@ -32,41 +35,40 @@ class UserLookup:
         try:
             # If ping is typed out by user using their ID, it doesn't count as a mention
             # Thus, try and match with regex
-            checkPing = re.search(r"<@!?(\d+)>", content)
-            if checkPing:
-                return int(checkPing.group(1))
+            check_ping = re.search(r"<@!?(\d+)>", content)
+            if check_ping:
+                return int(check_ping.group(1))
 
             # Simply verify by attempting to cast to an int. If it doesn't raise an error, return it
             # NOTE: This requires the ID to be first word, after the command
-            checkID = content.split()[0]
-            return int(checkID)
+            check_id = content.split()[0]
+            return int(check_id)
         except (IndexError, ValueError):
             return None
 
     def _check_username(self, message: discord.Message) -> Optional[int]:
         # Usernames can have spaces, so need to throw away the first word (the command),
         # and then everything after the discriminator
-        testUsername = strip_words(message.content, 1)
+        test_username = strip_words(message.content, 1)
 
         try:
             # Some people *coughs* like to put a '@' at beginning of the username.
             # Remove the '@' if it exists at the front of the message
-            if testUsername[0] == "@":
-                testUsername = testUsername[1:]
+            if test_username[0] == "@":
+                test_username = test_username[1:]
 
             # Parse out the actual username
-            user = testUsername.split("#")
+            user = test_username.split("#")
             discriminator = user[1].split()[0]
-            userFound = discord.utils.get(message.guild.members, name=user[0], discriminator=discriminator)
-            if userFound:
-                return userFound.id
+            user_found = discord.utils.get(message.guild.members, name=user[0], discriminator=discriminator)
+            if user_found:
+                return user_found.id
 
             # If not found in server, check if they're in the recently banned dict
             fullname = f"{user[0]}#{discriminator}"
             if fullname in list(self.recent_bans.values()):
-                revBans = {v: k for k, v in self.recent_bans.items()}
-                return revBans[fullname]
-
+                rev_bans = {v: k for k, v in self.recent_bans.items()}
+                return rev_bans[fullname]
             return None
         except IndexError:
             return None

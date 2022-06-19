@@ -1,4 +1,5 @@
-import datetime, discord
+import datetime
+import discord
 from commonbot.utils import get_time_delta
 
 class Timekeeper:
@@ -7,7 +8,7 @@ class Timekeeper:
 
     async def uptime(self, message: discord.Message, _):
         curr_time = datetime.datetime.now()
-        days, hours, minutes = get_time_delta(curr_time, self.start_time)
+        days, hours, minutes, _ = get_time_delta(curr_time, self.start_time)
         mes = f"I have been running for {days} days, {hours} hours, and {minutes} minutes"
 
         await message.channel.send(mes)

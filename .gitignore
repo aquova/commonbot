@@ -1,4 +1,5 @@
 *.code-workspace
+**/.devcontainer/*
 
 # Python generated files
 **/*.egg-info/*

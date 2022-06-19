@@ -8,7 +8,7 @@ RUN apk update && apk add \
     git \
     sqlite
 
-RUN pip3 install mypy
+RUN pip3 install pylint
 
 COPY setup.py /tmp
 COPY commonbot /tmp/commonbot

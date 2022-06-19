@@ -1,33 +1,33 @@
-import discord
 from datetime import datetime
+import discord
 
 CHAR_LIMIT = 2000
 
 # Strips the prefix character from a string
-def strip_prefix(m: str, prefix: str) -> str:
-    return m[len(str(prefix)):]
+def strip_prefix(txt: str, prefix: str) -> str:
+    return txt[len(str(prefix)):]
 
 # Strips num words from front of a sentence
-def strip_words(m: str, num: int) -> str:
-    to_remove = m.split()[0:num]
+def strip_words(txt: str, num: int) -> str:
+    to_remove = txt.split()[0:num]
     size = 0
-    for x in to_remove:
-        size += len(x) + 1
+    for char in to_remove:
+        size += len(char) + 1
 
     # This perserves whitespace
-    return m[size:]
+    return txt[size:]
 
 # Fetches the first word from a sentence
-def get_first_word(m: str) -> str:
+def get_first_word(txt: str) -> str:
     try:
-        return m.split()[0]
+        return txt.split()[0]
     except IndexError:
         return ""
 
 # Input t is of the form: YYYY-MM-DD HH:MM:SS.SSSSSS
 # Output is of the form YYYY-MM-DD
-def format_time(t: datetime) -> str:
-    date = str(t).split()[0]
+def format_time(time: datetime) -> str:
+    date = str(time).split()[0]
     return date
 
 # Checks if given user has one of the roles specified in config.json
@@ -39,15 +39,15 @@ def check_roles(user: discord.Member, valid_roles: list[int]) -> bool:
 
 # Since usernames can have spaces, first check if it's a username, otherwise just cut off first word as normal
 def parse_message(message: str, username: str) -> str:
-    m = " ".join(message.split()[1:])
-    if m.startswith(username):
-        return m[len(username)+1:]
+    txt = " ".join(message.split()[1:])
+    if txt.startswith(username):
+        return txt[len(username)+1:]
     return strip_words(message, 2)
 
 # Gets the days, hours, minutes, seconds from the delta of two times
-def get_time_delta(t1: datetime, t2: datetime) -> tuple[int, int, int, int]:
+def get_time_delta(time1: datetime, time2: datetime) -> tuple[int, int, int, int]:
     # t1 should be larger than t2
-    delta = t1 - t2
+    delta = time1 - time2
     hours, remainder = divmod(delta.seconds, 3600)
     minutes, seconds = divmod(remainder, 60)
     return delta.days, hours, minutes, seconds
@@ -73,4 +73,3 @@ async def send_message(message: str, channel: discord.TextChannel) -> discord.Me
         if not first:
             first = sent
     return first
-
