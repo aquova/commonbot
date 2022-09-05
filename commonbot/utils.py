@@ -64,12 +64,34 @@ def combine_message(mes: discord.Message) -> str:
     return out
 
 async def send_message(message: str, channel: discord.TextChannel) -> discord.Message:
-    mes = message
+    mes_list = message.split('\n')
     first = None
+    mes = mes_list[0]
+    idx = 1
     while mes != "":
-        to_send = mes[:CHAR_LIMIT]
-        mes = mes[CHAR_LIMIT:]
-        sent = await channel.send(to_send)
-        if not first:
-            first = sent
+        # Discord treats escape \ characters as two characters, while Python len() counts them as one.
+        if len(mes.encode('unicode-escape')) > CHAR_LIMIT:
+            first = mes[:CHAR_LIMIT]
+            second = mes[CHAR_LIMIT:]
+            sent = await channel.send(first)
+            await channel.send(second)
+            mes = ""
+            if not first:
+                first = sent
+
+        line = ""
+        if idx < len(mes_list):
+            line = mes_list[idx]
+            idx += 1
+
+        if mes == "" and line == "":
+            break
+
+        if len(mes.encode('unicode-escape')) + len(line.encode('unicode-escape')) < CHAR_LIMIT + 2 and line != "":
+            mes += f"\n{line}"
+        else:
+            sent = await channel.send(mes)
+            if not first:
+                first = sent
+            mes = line
     return first
