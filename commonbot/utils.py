@@ -67,8 +67,7 @@ async def send_message(message: str, channel: discord.TextChannel) -> discord.Me
     mes_list = message.split('\n')
     first = None
     mes = mes_list[0]
-    idx = 1
-    while mes != "":
+    for line in mes_list[1:]:
         # Discord treats escape \ characters as two characters, while Python len() counts them as one.
         if len(mes.encode('unicode-escape')) > CHAR_LIMIT:
             first = mes[:CHAR_LIMIT]
@@ -79,19 +78,17 @@ async def send_message(message: str, channel: discord.TextChannel) -> discord.Me
             if not first:
                 first = sent
 
-        line = ""
-        if idx < len(mes_list):
-            line = mes_list[idx]
-            idx += 1
+        next_string = f"{mes}\n{line}"
 
-        if mes == "" and line == "":
-            break
-
-        if len(mes.encode('unicode-escape')) + len(line.encode('unicode-escape')) < CHAR_LIMIT + 2 and line != "":
-            mes += f"\n{line}"
+        if len(next_string.encode('unicode-escape')) < CHAR_LIMIT:
+            mes = next_string
         else:
             sent = await channel.send(mes)
             if not first:
                 first = sent
             mes = line
+    if mes != "":
+        sent = await channel.send(mes)
+        if not first:
+            first = sent
     return first

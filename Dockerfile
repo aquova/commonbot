@@ -1,6 +1,6 @@
 FROM python:alpine
 
-ENV COMMONBOT_VER=2.0.0.2
+ARG COMMONBOT_VER=2.0.0.3
 
 RUN apk update && apk add \
     build-base \
