@@ -42,7 +42,12 @@ class UserLookup:
             # Simply verify by attempting to cast to an int. If it doesn't raise an error, return it
             # NOTE: This requires the ID to be first word, after the command
             check_id = content.split()[0]
-            return int(check_id)
+
+            # Match at least 4 integers to not confuse user ids with regular numbers
+            # User ids are snowflakes. Based on the snowflake format (https://discord.com/developers/docs/reference#snowflakes)
+            # Any account created after the first millisecond of 2015 will have an id of at least 4194304 (1 << 22)
+            # Which is 7 integers, so this practically shouldn't ever miss anyone.
+            return int(check_id) if len(check_id) >= 4 else None
         except (IndexError, ValueError):
             return None
 

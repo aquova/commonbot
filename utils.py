@@ -37,8 +37,14 @@ def check_roles(user: discord.Member, valid_roles: list[int]) -> bool:
             return True
     return False
 
-# Since usernames can have spaces, first check if it's a username, otherwise just cut off first word as normal
-def parse_message(message: str, username: str) -> str:
+# Removes a user mention from a message
+def parse_message(message: str, username: str, username_in_message: bool = True) -> str:
+    # If the username isn't in the message, just strip the command from it
+    if not username_in_message:
+        return strip_words(message, 1)
+
+    # Otherwise strip the command and username
+    # Since usernames can have spaces, first check if it's a username, otherwise just cut off first word as normal
     txt = " ".join(message.split()[1:])
     if txt.startswith(username):
         return txt[len(username)+1:]
