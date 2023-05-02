@@ -69,7 +69,7 @@ def combine_message(mes: discord.Message) -> str:
 
     return out
 
-async def send_message(message: str, channel: discord.TextChannel) -> discord.Message:
+async def send_message(message: str, channel: discord.TextChannel, embed: discord.Embed | None = None) -> discord.Message:
     mes_list = message.split('\n')
     first = None
     mes = mes_list[0]
@@ -78,8 +78,8 @@ async def send_message(message: str, channel: discord.TextChannel) -> discord.Me
         if len(mes.encode('unicode-escape')) > CHAR_LIMIT:
             first = mes[:CHAR_LIMIT]
             second = mes[CHAR_LIMIT:]
-            sent = await channel.send(first)
-            await channel.send(second)
+            sent = await channel.send(content=first)
+            await channel.send(content=second)
             mes = ""
             if not first:
                 first = sent
@@ -89,12 +89,12 @@ async def send_message(message: str, channel: discord.TextChannel) -> discord.Me
         if len(next_string.encode('unicode-escape')) < CHAR_LIMIT:
             mes = next_string
         else:
-            sent = await channel.send(mes)
+            sent = await channel.send(content=mes)
             if not first:
                 first = sent
             mes = line
-    if mes != "":
-        sent = await channel.send(mes)
+    if mes or embed:
+        sent = await channel.send(content=mes, embed=embed)
         if not first:
             first = sent
     return first
