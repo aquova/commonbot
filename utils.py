@@ -1,4 +1,5 @@
 from datetime import datetime
+
 import discord
 
 CHAR_LIMIT = 2000
@@ -24,7 +25,6 @@ def get_first_word(txt: str) -> str:
     except IndexError:
         return ""
 
-# Input t is of the form: YYYY-MM-DD HH:MM:SS.SSSSSS
 # Output is of the form YYYY-MM-DD
 def format_time(time: datetime) -> str:
     date = str(time).split()[0]
@@ -98,3 +98,11 @@ async def send_message(message: str, channel: discord.TextChannel) -> discord.Me
         if not first:
             first = sent
     return first
+
+# Display the username during the discriminator transition
+# TODO: Upon discord.py update, __str__ should provide this functionality
+def user_str(user: discord.User) -> str:
+    if user.discriminator == 0:
+        return user.name
+    else:
+        return f"{user.name}#{user.discriminator}"

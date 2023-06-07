@@ -3,7 +3,7 @@ from typing import Optional
 
 import discord
 
-from commonbot.utils import strip_words
+from commonbot.utils import strip_words, user_str
 
 class UserLookup:
     def __init__(self):
@@ -52,8 +52,6 @@ class UserLookup:
             return None
 
     def _check_username(self, message: discord.Message) -> Optional[int]:
-        # Usernames can have spaces, so need to throw away the first word (the command),
-        # and then everything after the discriminator
         test_username = strip_words(message.content, 1)
 
         try:
@@ -62,18 +60,14 @@ class UserLookup:
             if test_username[0] == "@":
                 test_username = test_username[1:]
 
-            # Parse out the actual username
-            user = test_username.split("#")
-            discriminator = user[1].split()[0]
-            user_found = discord.utils.get(message.guild.members, name=user[0], discriminator=discriminator)
+            user_found = discord.utils.get(message.guild.members, name=test_username)
             if user_found:
                 return user_found.id
 
             # If not found in server, check if they're in the recently banned dict
-            fullname = f"{user[0]}#{discriminator}"
-            if fullname in list(self.recent_bans.values()):
+            if test_username in list(self.recent_bans.values()):
                 rev_bans = {v: k for k, v in self.recent_bans.items()}
-                return rev_bans[fullname]
+                return rev_bans[test_username]
             return None
         except IndexError:
             return None
@@ -90,7 +84,7 @@ class UserLookup:
         member = client.get_user(userid)
         if member:
             # If we found a member in the server, simply format the username
-            username = f"{str(member)}"
+            username = user_str(member)
 
         if not username:
             # If user has recently left, use that username

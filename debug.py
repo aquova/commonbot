@@ -12,7 +12,7 @@ class Debug:
         command = get_first_word(message.content).lower()
         return command == f"{self.prefix}debug"
 
-    async def toggle_debug(self, message: discord.message):
+    async def toggle_debug(self, message: discord.Message):
         if message.author.id == self.owner and not self.is_debug:
             self.debugging = not self.debugging
             enable_mes = "enabled" if self.debugging else "disabled"
