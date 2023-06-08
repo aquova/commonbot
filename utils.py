@@ -102,7 +102,7 @@ async def send_message(message: str, channel: discord.TextChannel) -> discord.Me
 # Display the username during the discriminator transition
 # TODO: Upon discord.py update, __str__ should provide this functionality
 def user_str(user: discord.User) -> str:
-    if user.discriminator == 0:
+    if user.discriminator == "0":
         return user.name
     else:
         return f"{user.name}#{user.discriminator}"
