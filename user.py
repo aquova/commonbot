@@ -60,9 +60,10 @@ class UserLookup:
             if test_username[0] == "@":
                 test_username = test_username[1:]
 
-            user_found = discord.utils.get(message.guild.members, name=test_username)
-            if user_found:
-                return user_found.id
+            if message.guild:
+                user_found = discord.utils.get(message.guild.members, name=test_username)
+                if user_found:
+                    return user_found.id
 
             # If not found in server, check if they're in the recently banned dict
             if test_username in list(self.recent_bans.values()):

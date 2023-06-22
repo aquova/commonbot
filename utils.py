@@ -69,9 +69,9 @@ def combine_message(mes: discord.Message) -> str:
 
     return out
 
-async def send_message(message: str, channel: discord.TextChannel) -> discord.Message:
+async def send_message(message: str, channel: discord.TextChannel) -> discord.Message | None:
     mes_list = message.split('\n')
-    first = None
+    msg_id = None
     mes = mes_list[0]
     for line in mes_list[1:]:
         # Discord treats escape \ characters as two characters, while Python len() counts them as one.
@@ -81,8 +81,8 @@ async def send_message(message: str, channel: discord.TextChannel) -> discord.Me
             sent = await channel.send(first)
             await channel.send(second)
             mes = ""
-            if not first:
-                first = sent
+            if not msg_id:
+                msg_id = sent
 
         next_string = f"{mes}\n{line}"
 
@@ -90,18 +90,18 @@ async def send_message(message: str, channel: discord.TextChannel) -> discord.Me
             mes = next_string
         else:
             sent = await channel.send(mes)
-            if not first:
-                first = sent
+            if not msg_id:
+                msg_id = sent
             mes = line
     if mes != "":
         sent = await channel.send(mes)
-        if not first:
-            first = sent
-    return first
+        if not msg_id:
+            msg_id = sent
+    return msg_id
 
 # Display the username during the discriminator transition
 # TODO: Upon discord.py update, __str__ should provide this functionality
-def user_str(user: discord.User) -> str:
+def user_str(user: discord.Member | discord.User) -> str:
     if user.discriminator == "0":
         return user.name
     else:
