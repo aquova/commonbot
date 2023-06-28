@@ -3,7 +3,7 @@ from typing import Optional
 
 import discord
 
-from commonbot.utils import strip_words, user_str
+from commonbot.utils import strip_words
 
 class UserLookup:
     def __init__(self):
@@ -85,7 +85,7 @@ class UserLookup:
         member = client.get_user(userid)
         if member:
             # If we found a member in the server, simply format the username
-            username = user_str(member)
+            username = str(member)
 
         if not username:
             # If user has recently left, use that username
