@@ -31,7 +31,9 @@ def format_time(time: datetime) -> str:
     return date
 
 # Checks if given user has one of the roles specified in config.json
-def check_roles(user: discord.Member, valid_roles: list[int]) -> bool:
+def check_roles(user: discord.Member | discord.User, valid_roles: list[int]) -> bool:
+    if isinstance(user, discord.User):
+        return False
     for role in valid_roles:
         if user.get_role(role):
             return True
@@ -69,7 +71,7 @@ def combine_message(mes: discord.Message) -> str:
 
     return out
 
-async def send_message(message: str, channel: discord.TextChannel) -> discord.Message | None:
+async def send_message(message: str, channel: discord.TextChannel | discord.Thread) -> discord.Message | None:
     mes_list = message.split('\n')
     msg_id = None
     mes = mes_list[0]
