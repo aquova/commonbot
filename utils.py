@@ -1,8 +1,9 @@
 from datetime import datetime
+from textwrap import wrap
 
 import discord
 
-CHAR_LIMIT = 2000
+CHAR_LIMIT = 1990 # The actual limit is 2000, but we'll be conservative
 
 # Strips the prefix character from a string
 def strip_prefix(txt: str, prefix: str) -> str:
@@ -72,31 +73,20 @@ def combine_message(mes: discord.Message) -> str:
     return out
 
 async def send_message(message: str, channel: discord.TextChannel | discord.Thread) -> discord.Message | None:
-    mes_list = message.split('\n')
-    msg_id = None
-    mes = mes_list[0]
-    for line in mes_list[1:]:
-        # Discord treats escape \ characters as two characters, while Python len() counts them as one.
-        if len(mes.encode('unicode-escape')) > CHAR_LIMIT:
-            first = mes[:CHAR_LIMIT]
-            second = mes[CHAR_LIMIT:]
-            sent = await channel.send(first)
-            await channel.send(second)
-            mes = ""
-            if not msg_id:
-                msg_id = sent
-
-        next_string = f"{mes}\n{line}"
-
-        if len(next_string.encode('unicode-escape')) < CHAR_LIMIT:
-            mes = next_string
+    messages = message.split('\n')
+    to_send = [messages[0]]
+    for msg in messages[1:]:
+        if len(msg) >= CHAR_LIMIT:
+            to_send += wrap(msg, width=CHAR_LIMIT)
+        elif len(msg) + len(to_send[-1]) < CHAR_LIMIT:
+            to_send[-1] += f"\n{msg}"
         else:
-            sent = await channel.send(mes)
-            if not msg_id:
-                msg_id = sent
-            mes = line
-    if mes != "":
-        sent = await channel.send(mes)
-        if not msg_id:
-            msg_id = sent
-    return msg_id
+            to_send.append(msg)
+
+    first_id = None
+    for msg in to_send:
+        if len(msg) > 0:
+            mid = await channel.send(msg)
+            first_id = mid if first_id is None else first_id
+    return first_id
+
